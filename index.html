@@ -120,7 +120,7 @@
         </button>
         <button onclick="openSyncGuideModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-3 py-2 rounded-xl transition flex items-center space-x-1 border border-slate-700 active:scale-95">
           <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i>
-          <span>Sheets Guide</span>
+          <span>Sheet Read/Write Settings</span>
         </button>
       </div>
 
@@ -757,14 +757,14 @@
       <div class="bg-slate-900 px-5 py-3.5 flex items-center justify-between text-white">
         <h3 class="font-semibold text-sm sm:text-base flex items-center space-x-2">
           <i data-lucide="file-spreadsheet" class="w-4 h-4 text-amber-400"></i>
-          <span>Google Sheet Integration (ID: 1d6Tb5JjTPiJbFVnFKcJtLGf9sdTdnXJJdX7QfbkvsyE)</span>
+          <span>Google Sheet Read/Write Database Integration</span>
         </h3>
         <button onclick="closeSyncGuideModal()" class="text-slate-400 hover:text-white p-1">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <div class="p-5 space-y-3.5 text-xs text-slate-600">
+      <div class="p-5 space-y-3.5 text-xs text-slate-600 max-h-[80vh] overflow-y-auto">
         <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
           <div class="flex items-center justify-between">
             <span class="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
@@ -772,17 +772,36 @@
             </span>
             <span class="font-mono text-[10px] bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold text-emerald-800">1d6Tb5JjTPiJbFVnFKcJtLGf9sdTdnXJJdX7QfbkvsyE</span>
           </div>
-          <p class="text-[11px] text-emerald-800 mt-1">This portal is connected to your Google Sheet. Click <strong>"Sync Sheet"</strong> anytime to pull the latest entries from the spreadsheet.</p>
+          <p class="text-[11px] text-emerald-800 mt-1"><strong>Read Status:</strong> Connected. The portal automatically reads records from this Google Sheet without modifying or deleting existing entries.</p>
         </div>
 
-        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 p-3 rounded-r text-emerald-900">
-          <p class="font-bold text-xs sm:text-sm">Option 1: Direct Clipboard Copy into Sheet (Fastest)</p>
-          <p class="mt-1">Tap <strong class="text-emerald-700">"Copy Sheets"</strong> in the main toolbar. Select cell <strong>A1</strong> in your Google Sheet, and press <strong>Ctrl+V / Cmd+V</strong>.</p>
+        <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-amber-900 space-y-1">
+          <p class="font-bold text-xs flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-4 h-4 text-amber-600"></i> Zero-Deletion Guarantee
+          </p>
+          <p class="text-[11px]">This application is strictly programmed to <strong>NEVER DELETE</strong> rows from your Google Sheet. All operations are additive and cumulative.</p>
         </div>
 
-        <div class="bg-blue-50/70 border-l-4 border-blue-500 p-3 rounded-r text-blue-900">
-          <p class="font-bold text-xs sm:text-sm">Option 2: Import CSV File</p>
-          <p class="mt-1">Click <strong class="text-blue-700">"Export CSV"</strong> to download a formatted `.csv` file, then open Google Sheets and go to <strong>File ➔ Import ➔ Upload</strong>.</p>
+        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-2">
+          <label class="block font-bold text-slate-800 text-xs">Direct Webhook Write URL (Google Apps Script Web App)</label>
+          <input type="url" id="inputAppsScriptUrl" placeholder="Paste your Google Apps Script Web App URL here (Optional for live auto-write)" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-xs font-mono outline-none focus:ring-2 focus:ring-emerald-500" onchange="saveAppsScriptUrl(this.value)">
+          <p class="text-[10px] text-slate-500">If set, any new entry created in this portal will be posted directly into your Google Sheet in real-time.</p>
+        </div>
+
+        <div class="p-3 bg-slate-900 text-slate-200 rounded-xl space-y-2">
+          <p class="font-bold text-xs text-amber-300 flex items-center gap-1">
+            <i data-lucide="code" class="w-4 h-4"></i> Optional 1-Minute Live Write Setup (Apps Script)
+          </p>
+          <ol class="list-decimal list-inside text-[11px] space-y-1 text-slate-300">
+            <li>In your Google Sheet, go to <strong>Extensions ➔ Apps Script</strong>.</li>
+            <li>Paste this simple 5-line code and click <strong>Deploy ➔ New Deployment ➔ Web App</strong> (Execute as: <em>Me</em>, Access: <em>Anyone</em>):</li>
+          </ol>
+          <pre class="bg-slate-950 p-2.5 rounded-lg text-[10px] font-mono text-emerald-400 overflow-x-auto selection:bg-emerald-800 selection:text-white">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([data.state, data.metro, data.corridor, data.category, data.firmName, data.repName, data.mobile, data.altMobile, data.email, data.zoning, data.parcelSize, data.reraId, data.verification]);
+  return ContentService.createTextOutput("Success");
+}</pre>
         </div>
 
         <div class="flex justify-between items-center pt-2">
@@ -791,7 +810,7 @@
             <span>Open Google Sheet directly</span>
           </button>
           <button onclick="closeSyncGuideModal()" class="px-4 py-2 bg-slate-900 text-white rounded-xl font-semibold transition active:scale-95">
-            Understood
+            Done
           </button>
         </div>
       </div>
@@ -854,6 +873,17 @@
     const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv`;
     const GOOGLE_SHEET_EDIT_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit`;
 
+    // Local Storage setting for direct writing
+    let APPS_SCRIPT_WEBAPP_URL = localStorage.getItem('LANDCALCI_APPS_SCRIPT_URL') || '';
+
+    function saveAppsScriptUrl(url) {
+      APPS_SCRIPT_WEBAPP_URL = url.trim();
+      localStorage.setItem('LANDCALCI_APPS_SCRIPT_URL', APPS_SCRIPT_WEBAPP_URL);
+      if (APPS_SCRIPT_WEBAPP_URL) {
+        showToast("Saved Apps Script write endpoint!", "success");
+      }
+    }
+
     function openGoogleSheet() {
       window.open(GOOGLE_SHEET_EDIT_URL, '_blank');
       showToast("Opening Google Sheet database in new tab...", "info");
@@ -878,6 +908,35 @@
           openGoogleSheet();
         }
       }
+    }
+
+    async function writeRecordToGoogleSheet(record) {
+      // 1. If Apps Script URL is available, send via POST request
+      if (APPS_SCRIPT_WEBAPP_URL) {
+        try {
+          await fetch(APPS_SCRIPT_WEBAPP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(record)
+          });
+          showToast("Posted new record to Google Sheet!", "success");
+          return;
+        } catch (err) {
+          console.warn("Apps script write error:", err);
+        }
+      }
+
+      // 2. Fallback: Copy TSV string to clipboard for easy manual pasting into the sheet
+      const tsvLine = [
+        record.state, record.metro, record.corridor, record.category,
+        record.firmName, record.repName, record.mobile, record.altMobile,
+        record.email, record.zoning, record.parcelSize, record.reraId, record.verification
+      ].join("\t");
+
+      navigator.clipboard.writeText(tsvLine).then(() => {
+        showToast("Record copied to clipboard for Google Sheets (Ctrl+V into Sheet)", "info");
+      }).catch(() => {});
     }
 
     function parseAndMergeCSVText(text) {
@@ -1997,6 +2056,9 @@
         showToast(`Added ${newRecord.firmName}`, "success");
       }
 
+      // Write changes to Google Sheet without deleting existing data
+      writeRecordToGoogleSheet(newRecord);
+
       closeAddModal();
       populateFilterDropdowns();
       renderDirectory();
@@ -2007,13 +2069,13 @@
       if (!item) return;
 
       showConfirmModal(
-        "Delete Record",
-        `Remove "${item.firmName}" (${item.corridor}) from directory?`,
+        "Remove from View",
+        `Hide "${item.firmName}" from active session view? (Note: Google Sheet database records are permanently preserved and will NOT be deleted).`,
         () => {
           landDatabase = landDatabase.filter(d => d.id !== id);
           populateFilterDropdowns();
           renderDirectory();
-          showToast(`Deleted ${item.firmName}`, "info");
+          showToast(`Hidden from current session view (Sheet preserved)`, "info");
         }
       );
     }
@@ -2078,6 +2140,13 @@
       lucide.createIcons();
       populateFilterDropdowns();
       renderDirectory();
+      
+      const savedScriptUrl = localStorage.getItem('LANDCALCI_APPS_SCRIPT_URL');
+      if (savedScriptUrl) {
+        const scriptInput = document.getElementById('inputAppsScriptUrl');
+        if (scriptInput) scriptInput.value = savedScriptUrl;
+      }
+
       fetchFromGoogleSheet(true);
     });
   </script>
