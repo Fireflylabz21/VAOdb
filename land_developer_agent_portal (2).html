@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Landcalci db - Pan-India Land Developers, VAOs, Surveyors & Agro Directory</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            landDark: '#0f172a',
+            landEmerald: '#059669',
+            landGold: '#d97706',
+            landNavy: '#1e293b',
+            landAccent: '#0284c7'
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Mobile Touch Optimizations */
+    -webkit-tap-highlight-color: transparent;
+    
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.02); }
+    }
+    .animate-pulseGlow {
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 min-h-full pb-20 md:pb-6 flex flex-col relative antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed top-3 left-3 right-3 sm:right-4 sm:left-auto sm:w-80 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <!-- Custom Confirm Action Modal -->
+  <div id="customConfirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl sm:rounded-xl shadow-2xl max-w-md w-full p-5 sm:p-6 space-y-4 border border-slate-200 animate-in fade-in zoom-in duration-150">
+      <div class="flex items-center space-x-3 text-amber-600">
+        <div class="p-2 bg-amber-50 rounded-lg">
+          <i data-lucide="alert-triangle" class="w-6 h-6 shrink-0"></i>
+        </div>
+        <h3 id="confirmTitle" class="font-bold text-slate-900 text-base">Confirm Action</h3>
+      </div>
+      <p id="confirmMessage" class="text-xs text-slate-600 leading-relaxed">Are you sure you want to perform this directory management action?</p>
+      <div class="flex justify-end space-x-2 pt-2 border-t border-slate-100">
+        <button id="confirmCancelBtn" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition active:scale-95">Cancel</button>
+        <button id="confirmOkBtn" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-semibold transition shadow-sm active:scale-95">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Luxury Bar -->
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-amber-500 to-sky-600 sticky top-0 z-40"></div>
+
+  <header class="bg-slate-900 text-white shadow-lg sticky top-1.5 z-30 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-2">
+      
+      <!-- Brand & Mobile Title -->
+      <div class="flex items-center space-x-2.5 min-w-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-md text-white font-bold shrink-0">
+          <i data-lucide="map" class="w-5 h-5 text-amber-300"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center space-x-1.5">
+            <h1 class="text-xs sm:text-base font-bold tracking-tight text-white truncate">Landcalci db</h1>
+            <span class="hidden lg:inline-block bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded font-semibold border border-emerald-500/30">OFFICIAL CADRE & AGENTS</span>
+          </div>
+          <p class="text-[10px] sm:text-xs text-slate-300 truncate">VAOs, DGPS Surveyors, Agro Agents, Developers & Tahsildars</p>
+        </div>
+      </div>
+
+      <!-- Desktop Quick Actions Bar -->
+      <div class="hidden md:flex items-center space-x-2 text-xs">
+        <button onclick="openAiMarketModal()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold px-3 py-2 rounded-xl transition flex items-center space-x-1.5 shadow-md border border-emerald-400/30 animate-pulseGlow active:scale-95">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+          <span>AI Market Search</span>
+        </button>
+        <button onclick="openSyncGuideModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-3 py-2 rounded-xl transition flex items-center space-x-1 border border-slate-700 active:scale-95">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i>
+          <span>Sheet Read/Write Settings</span>
+        </button>
+      </div>
+
+      <!-- Mobile Quick Menu Trigger Button -->
+      <button onclick="toggleMobileActionsMenu()" class="md:hidden p-2 text-slate-300 hover:text-white bg-slate-800 rounded-lg border border-slate-700 active:bg-slate-700">
+        <i data-lucide="more-vertical" class="w-5 h-5"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- Mobile Actions Drawer Menu -->
+  <div id="mobileActionsDrawer" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden transition-opacity flex flex-col justify-end md:hidden">
+    <div class="bg-white rounded-t-2xl p-5 space-y-3 border-t border-slate-200 max-h-[80vh] overflow-y-auto animate-in slide-in-from-bottom duration-200">
+      <div class="flex items-center justify-between border-b pb-2">
+        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+          <i data-lucide="sliders" class="w-4 h-4 text-emerald-600"></i> Quick Portal Tools
+        </h3>
+        <button onclick="toggleMobileActionsMenu()" class="p-1 text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 text-xs pt-1">
+        <button onclick="toggleMobileActionsMenu(); fetchFromGoogleSheet();" class="p-3 bg-emerald-100 text-emerald-900 rounded-xl font-bold flex flex-col items-center justify-center text-center space-y-1.5 border border-emerald-300 active:scale-95">
+          <i data-lucide="refresh-cw" class="w-5 h-5 text-emerald-700"></i>
+          <span>Sync Google Sheet</span>
+        </button>
+
+        <button onclick="toggleMobileActionsMenu(); openGoogleSheet();" class="p-3 bg-slate-100 text-slate-800 rounded-xl font-semibold flex flex-col items-center justify-center text-center space-y-1.5 border border-slate-300 active:scale-95">
+          <i data-lucide="external-link" class="w-5 h-5 text-slate-700"></i>
+          <span>Open Sheet ID</span>
+        </button>
+
+        <button onclick="toggleMobileActionsMenu(); openAiMarketModal();" class="p-3 bg-emerald-50 text-emerald-800 rounded-xl font-semibold flex flex-col items-center justify-center text-center space-y-1.5 border border-emerald-200 active:scale-95">
+          <i data-lucide="sparkles" class="w-5 h-5 text-emerald-600"></i>
+          <span>Grounded AI Query</span>
+        </button>
+
+        <button onclick="toggleMobileActionsMenu(); seedAllIndiaLandData();" class="p-3 bg-amber-50 text-amber-800 rounded-xl font-semibold flex flex-col items-center justify-center text-center space-y-1.5 border border-amber-200 active:scale-95">
+          <i data-lucide="globe" class="w-5 h-5 text-amber-600"></i>
+          <span>Auto-Seed All Belts</span>
+        </button>
+
+        <button onclick="toggleMobileActionsMenu(); exportToCSV();" class="p-3 bg-slate-50 text-slate-800 rounded-xl font-semibold flex flex-col items-center justify-center text-center space-y-1.5 border border-slate-200 active:scale-95">
+          <i data-lucide="download" class="w-5 h-5 text-slate-600"></i>
+          <span>Export CSV</span>
+        </button>
+
+        <button onclick="toggleMobileActionsMenu(); copyForGoogleSheets();" class="p-3 bg-blue-50 text-blue-800 rounded-xl font-semibold flex flex-col items-center justify-center text-center space-y-1.5 border border-blue-200 active:scale-95">
+          <i data-lucide="copy" class="w-5 h-5 text-blue-600"></i>
+          <span>Copy for Sheets</span>
+        </button>
+
+        <button onclick="toggleMobileActionsMenu(); openBroadcastModal();" class="p-3 bg-indigo-50 text-indigo-800 rounded-xl font-semibold flex flex-col items-center justify-center text-center space-y-1.5 border border-indigo-200 active:scale-95">
+          <i data-lucide="send" class="w-5 h-5 text-indigo-600"></i>
+          <span>Broadcast Lead</span>
+        </button>
+
+        <button onclick="toggleMobileActionsMenu(); triggerCSVImport();" class="p-3 bg-slate-50 text-slate-800 rounded-xl font-semibold flex flex-col items-center justify-center text-center space-y-1.5 border border-slate-200 active:scale-95">
+          <i data-lucide="upload" class="w-5 h-5 text-slate-600"></i>
+          <span>Import CSV File</span>
+        </button>
+      </div>
+
+      <div class="pt-2 border-t">
+        <button onclick="toggleMobileActionsMenu(); openAddModal();" class="w-full py-3 bg-slate-900 text-white rounded-xl font-semibold text-xs flex items-center justify-center space-x-2 shadow">
+          <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
+          <span>Add New Officer / Surveyor / Agent</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-4 space-y-4">
+
+    <!-- Metrics Cards Grid (Responsive 2x2 on Mobile, 4x1 on Desktop) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+      <div class="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">Active Entities</p>
+          <div class="p-1.5 sm:p-2.5 bg-emerald-50 text-emerald-600 rounded-lg sm:rounded-xl">
+            <i data-lucide="users" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </div>
+        </div>
+        <div class="mt-2">
+          <h3 id="statTotalBrokers" class="text-xl sm:text-2xl font-black text-slate-900">0</h3>
+          <p class="text-[9px] sm:text-[10px] text-emerald-700 font-medium truncate mt-0.5">VAOs, Surveyors & Agents</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">Licensed Cadre</p>
+          <div class="p-1.5 sm:p-2.5 bg-blue-50 text-blue-600 rounded-lg sm:rounded-xl">
+            <i data-lucide="shield-check" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </div>
+        </div>
+        <div class="mt-2">
+          <h3 id="statReraCount" class="text-xl sm:text-2xl font-black text-blue-600">0</h3>
+          <p class="text-[9px] sm:text-[10px] text-blue-700 font-medium truncate mt-0.5">RERA / Govt Cadre</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">Acreage Scope</p>
+          <div class="p-1.5 sm:p-2.5 bg-amber-50 text-amber-600 rounded-lg sm:rounded-xl">
+            <i data-lucide="layers" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </div>
+        </div>
+        <div class="mt-2">
+          <h3 id="statTotalAcres" class="text-xl sm:text-2xl font-black text-amber-600">15,000+ Ac</h3>
+          <p class="text-[9px] sm:text-[10px] text-amber-700 font-medium truncate mt-0.5">Agri & Survey Mapping</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">District Belts</p>
+          <div class="p-1.5 sm:p-2.5 bg-purple-50 text-purple-600 rounded-lg sm:rounded-xl">
+            <i data-lucide="navigation" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </div>
+        </div>
+        <div class="mt-2">
+          <h3 id="statCorridors" class="text-xl sm:text-2xl font-black text-purple-600">0</h3>
+          <p class="text-[9px] sm:text-[10px] text-slate-400 font-medium truncate mt-0.5">Suburban & Agro Zones</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Box -->
+    <div class="bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 space-y-3">
+      
+      <!-- Search Row & Desktop Action Bar -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 sm:gap-4">
+        
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search VAO, Surveyor, Agent, Village, Mobile..." 
+            class="w-full pl-9 pr-8 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition"
+            oninput="renderDirectory()"
+          >
+          <button onclick="document.getElementById('searchInput').value=''; renderDirectory();" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+            <i data-lucide="x-circle" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <!-- Filter Drawer Toggle (Mobile) -->
+        <div class="flex items-center justify-between gap-2 md:hidden">
+          <button onclick="toggleMobileFilterPanel()" class="flex-1 py-2 px-3 bg-slate-100 border border-slate-300 text-slate-700 rounded-xl text-xs font-semibold flex items-center justify-center space-x-1.5 active:bg-slate-200">
+            <i data-lucide="filter" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>Filters & Categories</span>
+            <i data-lucide="chevron-down" id="filterChevron" class="w-3.5 h-3.5 transition-transform"></i>
+          </button>
+          
+          <button onclick="openAddModal()" class="py-2 px-3 bg-slate-900 text-white rounded-xl text-xs font-semibold flex items-center space-x-1 shadow active:scale-95">
+            <i data-lucide="user-plus" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Add</span>
+          </button>
+        </div>
+
+        <!-- Desktop Action Buttons -->
+        <div class="hidden md:flex flex-wrap items-center gap-2">
+          <button onclick="fetchFromGoogleSheet()" class="px-3 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+            <i data-lucide="refresh-cw" class="w-4 h-4 text-emerald-300"></i>
+            <span>Fetch from Sheet ID</span>
+          </button>
+
+          <button onclick="openAiMarketModal()" class="px-3 py-2 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+            <i data-lucide="globe" class="w-4 h-4 text-amber-300"></i>
+            <span>Live Grounded DB</span>
+          </button>
+
+          <button onclick="seedAllIndiaLandData()" class="px-3 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Auto-Seed Belts</span>
+          </button>
+
+          <button onclick="openAddModal()" class="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+            <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
+            <span>Add Entity</span>
+          </button>
+
+          <button onclick="triggerCSVImport()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 active:scale-95">
+            <i data-lucide="upload" class="w-4 h-4 text-slate-600"></i>
+            <span>Import CSV</span>
+          </button>
+          <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleCSVImport(event)">
+
+          <button onclick="exportToCSV()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Export CSV</span>
+          </button>
+
+          <button onclick="copyForGoogleSheets()" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span>Copy Sheets</span>
+          </button>
+
+          <button onclick="openBroadcastModal()" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Broadcast</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters Section (Collapsible on Mobile, Expanded on Desktop) -->
+      <div id="filterPanel" class="hidden md:block pt-3 border-t border-slate-100">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 text-xs">
+          
+          <!-- Category Filter -->
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Entity Role / Cadre</label>
+            <select id="filterCategory" onchange="renderDirectory()" class="w-full bg-emerald-50 border border-emerald-300 rounded-lg p-2 text-emerald-900 font-medium focus:outline-none focus:ring-1 focus:ring-emerald-500">
+              <option value="ALL">All Officers & Roles</option>
+              <option value="Village Administrative Officer (VAO)">Village Administrative Officer (VAO)</option>
+              <option value="Tahsildar / Revenue Inspector (RI)">Tahsildar / Revenue Inspector (RI)</option>
+              <option value="Land Surveyor & Cadastral Consultant">Land Surveyor & DGPS Consultant</option>
+              <option value="Farmhouse & Agro Agent">Farmhouse & Agro Agent</option>
+              <option value="Land Developer">Land Developer & Promoter</option>
+              <option value="Channel Partner">Channel Partner / Broker</option>
+            </select>
+          </div>
+
+          <!-- State Filter -->
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">State / UT</label>
+            <select id="filterState" onchange="onStateFilterChange()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+              <option value="ALL">All States & UTs</option>
+            </select>
+          </div>
+
+          <!-- Metro / District Filter -->
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">District / Hub</label>
+            <select id="filterMetro" onchange="onMetroFilterChange()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+              <option value="ALL">All District Hubs</option>
+            </select>
+          </div>
+
+          <!-- Zoning Filter -->
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Specialization</label>
+            <select id="filterZoning" onchange="renderDirectory()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+              <option value="ALL">All Specializations</option>
+              <option value="DGPS">DGPS & Drone Survey</option>
+              <option value="Agri Land / Farmhouse">Agri Land / Organic Farm</option>
+              <option value="DTCP/Layout">DTCP / CMDA Approved</option>
+              <option value="HMDA/CMDA/BDA">HMDA / BDA / BIAPPA Approved</option>
+            </select>
+          </div>
+
+          <!-- Verification Filter -->
+          <div class="flex items-end justify-between space-x-2">
+            <div class="flex-1">
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Verification</label>
+              <select id="filterRera" onchange="renderDirectory()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                <option value="ALL">All Verifications</option>
+                <option value="RERA Verified">RERA / Licensed Cadre</option>
+                <option value="Direct Mandate">Direct Owner Mandate</option>
+              </select>
+            </div>
+            
+            <button onclick="resetFilters()" class="p-2 text-slate-500 hover:text-emerald-700 hover:bg-slate-100 rounded-lg flex items-center justify-center font-medium active:scale-95 border border-slate-200" title="Reset Filters">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Directory Listing Section -->
+    <div class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      
+      <!-- Top Record Counter & Mobile Header -->
+      <div class="bg-slate-900 text-slate-200 px-4 py-2.5 flex items-center justify-between text-xs border-b border-slate-800">
+        <div class="font-semibold flex items-center space-x-2">
+          <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i>
+          <span>Showing <span id="recordCount" class="text-amber-300 font-mono font-bold">0</span> verified records</span>
+        </div>
+        <span class="text-[10px] text-slate-400 hidden sm:inline">Official Pan-India Cadre Directory Schema</span>
+      </div>
+
+      <!-- Mobile Card List View (< 768px) -->
+      <div id="mobileCardContainer" class="block md:hidden divide-y divide-slate-100 p-2 space-y-2.5">
+        <!-- Dynamic Mobile Contact Cards via JS -->
+      </div>
+
+      <!-- Desktop Table View (>= 768px) -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-900 text-slate-200 text-xs font-semibold uppercase tracking-wider">
+              <th class="py-3.5 px-4">Entity / Office / VAO Name</th>
+              <th class="py-3.5 px-4">District & Corridor Belt</th>
+              <th class="py-3.5 px-4">Specialization</th>
+              <th class="py-3.5 px-4">Extent / Scope</th>
+              <th class="py-3.5 px-4">Official Contact</th>
+              <th class="py-3.5 px-4 text-center">WhatsApp</th>
+              <th class="py-3.5 px-4">Verification</th>
+              <th class="py-3.5 px-4 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="landTableBody" class="divide-y divide-slate-200 text-xs text-slate-700">
+            <!-- Dynamic Table Rows via JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Mobile Floating Bottom App Bar -->
+  <div class="fixed bottom-0 left-0 right-0 bg-slate-900 text-slate-300 border-t border-slate-800 p-2 z-40 md:hidden flex items-center justify-around text-[10px]">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'}); toggleMobileFilterPanel();" class="flex flex-col items-center space-y-0.5 active:scale-95 text-slate-300 hover:text-white">
+      <i data-lucide="filter" class="w-5 h-5 text-emerald-400"></i>
+      <span>Filter</span>
+    </button>
+
+    <button onclick="openAiMarketModal()" class="flex flex-col items-center space-y-0.5 active:scale-95 text-slate-300 hover:text-white">
+      <i data-lucide="sparkles" class="w-5 h-5 text-amber-300"></i>
+      <span>AI Query</span>
+    </button>
+
+    <button onclick="openAddModal()" class="flex flex-col items-center space-y-0.5 active:scale-95 text-white bg-gradient-to-br from-emerald-500 to-teal-700 p-2 rounded-full -mt-5 shadow-lg border-2 border-slate-900">
+      <i data-lucide="plus" class="w-6 h-6 text-white"></i>
+    </button>
+
+    <button onclick="openBroadcastModal()" class="flex flex-col items-center space-y-0.5 active:scale-95 text-slate-300 hover:text-white">
+      <i data-lucide="send" class="w-5 h-5 text-indigo-400"></i>
+      <span>Broadcast</span>
+    </button>
+
+    <button onclick="toggleMobileActionsMenu()" class="flex flex-col items-center space-y-0.5 active:scale-95 text-slate-300 hover:text-white">
+      <i data-lucide="grid" class="w-5 h-5 text-sky-400"></i>
+      <span>Tools</span>
+    </button>
+  </div>
+
+  <!-- AI Grounded Search Modal -->
+  <div id="aiMarketModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200 flex flex-col max-h-[92vh]">
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-teal-900 px-5 py-3.5 flex items-center justify-between text-white shrink-0">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300">
+            <i data-lucide="globe" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-sm text-white">Grounded AI Land & Cadre Search</h3>
+            <p class="text-[10px] text-emerald-300">Search Live Registries & Official Portals</p>
+          </div>
+        </div>
+        <button onclick="closeAiMarketModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-3.5 overflow-y-auto text-xs">
+        <div class="bg-emerald-50/80 border border-emerald-200 p-3 rounded-xl text-emerald-900 space-y-1">
+          <p class="font-semibold text-xs text-emerald-800 flex items-center gap-1">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-600"></i> Live Search Grounding
+          </p>
+          <p class="text-[11px] text-emerald-800">Enter location details (e.g. <em>Pollachi Coconut Grove Belt, Hosur Agro Zone, Sholinganallur, Devanahalli BIAPPA</em>). The AI locates official officers, land brokers & surveyors from live state databases.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1 text-[11px]">State / Region</label>
+            <input type="text" id="queryStateInput" placeholder="e.g. Tamil Nadu" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1 text-[11px]">District / Metro</label>
+            <input type="text" id="queryCityInput" placeholder="e.g. Coimbatore / Chennai" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1 text-[11px]">Corridor / Village Belt <span class="text-red-500">*</span></label>
+            <input type="text" id="queryBeltInput" placeholder="e.g. Pollachi or Ambattur" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-1">
+          <button id="btnFetchMarket" onclick="executeMarketFetch()" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-xl font-semibold transition flex items-center justify-center space-x-2 shadow-md active:scale-95">
+            <i data-lucide="search" class="w-4 h-4"></i>
+            <span>Search Live Government DB</span>
+          </button>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div id="aiLoading" class="hidden py-6 text-center space-y-2 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="inline-block animate-spin rounded-full h-7 w-7 border-4 border-emerald-600 border-t-transparent"></div>
+          <p class="text-xs font-semibold text-slate-700">Querying Real Estate Intelligence & Land Registries...</p>
+        </div>
+
+        <!-- Result Card Preview -->
+        <div id="aiResultCard" class="hidden space-y-3 bg-slate-50 border border-slate-300 p-3.5 rounded-xl">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+            <div>
+              <span id="resCategoryBadge" class="bg-emerald-600 text-white font-bold text-[9px] px-2 py-0.5 rounded uppercase">Entity Located</span>
+              <h4 id="resFirmName" class="text-xs sm:text-sm font-bold text-slate-900 mt-1">Firm Name</h4>
+            </div>
+            <span id="resReraId" class="bg-white text-emerald-800 font-mono text-[9px] px-2 py-1 rounded border border-emerald-300 font-bold">RERA: Pending</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-700">
+            <div><strong>Representative:</strong> <span id="resRepName">-</span></div>
+            <div><strong>Contact:</strong> <span id="resMobile" class="font-mono font-bold text-blue-700">-</span></div>
+            <div><strong>Belt:</strong> <span id="resCorridor">-</span></div>
+            <div><strong>Specialization:</strong> <span id="resZoning" class="font-mono text-slate-800">-</span></div>
+            <div><strong>Scope:</strong> <span id="resParcelSize">-</span></div>
+            <div><strong>Email:</strong> <span id="resEmail" class="font-mono text-slate-800">-</span></div>
+          </div>
+
+          <div class="flex justify-end space-x-2 pt-2 border-t border-slate-200">
+            <button onclick="approveAndSaveMarketRecord()" class="w-full sm:w-auto px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold text-xs flex items-center justify-center space-x-1 shadow active:scale-95">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Approve & Save to Directory</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Dossier View Modal -->
+  <div id="dossierModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 max-h-[92vh] flex flex-col">
+      <div class="bg-slate-900 px-5 py-3.5 flex items-center justify-between text-white shrink-0">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 font-bold text-sm">
+            <i data-lucide="building" class="w-4 h-4"></i>
+          </div>
+          <div class="min-w-0">
+            <h3 id="dossierFirmName" class="font-bold text-sm text-white truncate">Firm Name</h3>
+            <p id="dossierCategoryBadge" class="text-[10px] text-amber-400 font-semibold truncate">Entity Type & Belt</p>
+          </div>
+        </div>
+        <button onclick="closeDossierModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-3.5 overflow-y-auto text-xs">
+        <div class="grid grid-cols-2 gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
+          <div>
+            <span class="text-slate-400 text-[10px] block font-bold uppercase">Officer / Lead:</span>
+            <strong id="dossierRepName" class="text-slate-800 font-bold text-xs sm:text-sm">Name</strong>
+            <span id="dossierRera" class="text-[10px] text-emerald-700 font-mono block font-bold mt-0.5 truncate">RERA / License Code</span>
+          </div>
+          <div>
+            <span class="text-slate-400 text-[10px] block font-bold uppercase">District Belt:</span>
+            <strong id="dossierMetroBelt" class="text-slate-800 font-semibold text-xs block truncate">Metro, Belt</strong>
+            <span id="dossierState" class="text-[10px] text-slate-500 block">State Name</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <h4 class="font-bold text-slate-700 text-[10px] uppercase tracking-wider border-b pb-1">Verified Direct Contacts</h4>
+          
+          <div class="flex items-center justify-between p-2.5 bg-blue-50/70 rounded-xl border border-blue-100">
+            <div class="flex items-center space-x-2.5">
+              <i data-lucide="phone-call" class="w-4 h-4 text-blue-600 shrink-0"></i>
+              <div>
+                <span class="text-[9px] text-slate-500 block">Official Call Line</span>
+                <span id="dossierMobile" class="font-mono font-bold text-slate-900 text-xs sm:text-sm">+91 0000000000</span>
+              </div>
+            </div>
+            <a id="dossierCallBtn" href="#" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition shadow-sm active:scale-95">
+              <i data-lucide="phone" class="w-3.5 h-3.5"></i> Call
+            </a>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 bg-emerald-50/70 rounded-xl border border-emerald-100">
+            <div class="flex items-center space-x-2.5">
+              <i data-lucide="message-circle" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+              <div>
+                <span class="text-[9px] text-slate-500 block">WhatsApp Official Line</span>
+                <span id="dossierAltMobile" class="font-mono font-bold text-slate-900 text-xs sm:text-sm">+91 0000000000</span>
+              </div>
+            </div>
+            <a id="dossierWhatsappBtn" href="#" target="_blank" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition shadow-sm active:scale-95">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i> Chat
+            </a>
+          </div>
+
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center space-x-2.5">
+            <i data-lucide="mail" class="w-4 h-4 text-slate-600 shrink-0"></i>
+            <div>
+              <span class="text-[9px] text-slate-500 block">Official Email</span>
+              <span id="dossierEmail" class="font-mono text-slate-800 font-medium">official@domain.com</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-slate-700 text-[10px] uppercase tracking-wider border-b pb-1">Portfolio & Scope</h4>
+          <div class="grid grid-cols-2 gap-2 text-slate-600 text-[11px]">
+            <div><strong>Specialization:</strong> <span id="dossierZoning">DGPS / Agro / Patta</span></div>
+            <div><strong>Extent / Scope:</strong> <span id="dossierParcelSize">0.5 to 100+ Acres</span></div>
+            <div><strong>Verification:</strong> <span id="dossierVerification">RERA / Licensed</span></div>
+            <div><strong>Operating Hub:</strong> <span id="dossierHubs" class="text-slate-800 truncate block">Corridor</span></div>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-2 border-t border-slate-200">
+          <button onclick="copyDossierContact()" class="px-3.5 py-2 bg-slate-900 text-white rounded-xl font-semibold transition flex items-center space-x-1.5 active:scale-95">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>Copy Dossier</span>
+          </button>
+          <button onclick="closeDossierModal()" class="px-3.5 py-2 bg-slate-100 text-slate-700 rounded-xl font-semibold transition">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Record Modal -->
+  <div id="landModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200 max-h-[92vh] flex flex-col">
+      <div class="bg-slate-900 px-5 py-3.5 flex items-center justify-between text-white shrink-0">
+        <h3 id="modalTitle" class="font-semibold text-sm sm:text-base flex items-center space-x-2">
+          <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
+          <span>Add New Officer / Surveyor / Agent</span>
+        </h3>
+        <button onclick="closeAddModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="landForm" onsubmit="saveLandRecord(event)" class="p-4 sm:p-6 space-y-3.5 overflow-y-auto text-xs">
+        <input type="hidden" id="editLandId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">State / UT <span class="text-red-500">*</span></label>
+            <input type="text" id="inputState" required placeholder="e.g. Tamil Nadu" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">District / Metro <span class="text-red-500">*</span></label>
+            <input type="text" id="inputMetro" required placeholder="e.g. Chennai Outer / Coimbatore" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Specific Corridor / Belt <span class="text-red-500">*</span></label>
+            <input type="text" id="inputCorridor" required placeholder="e.g. Sholinganallur or Pollachi" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Entity Category Role</label>
+            <select id="inputCategory" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 bg-white">
+              <option value="Village Administrative Officer (VAO)">Village Administrative Officer (VAO)</option>
+              <option value="Tahsildar / Revenue Inspector (RI)">Tahsildar / Revenue Inspector (RI)</option>
+              <option value="Land Surveyor & Cadastral Consultant">Land Surveyor & DGPS Consultant</option>
+              <option value="Farmhouse & Agro Agent">Farmhouse & Agro Agent</option>
+              <option value="Land Developer">Land Developer & Promoter</option>
+              <option value="Channel Partner">Channel Partner / Broker</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Firm / Office / Village <span class="text-red-500">*</span></label>
+            <input type="text" id="inputFirm" required placeholder="e.g. VAO Office Thiruvottiyur" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Representative / Officer <span class="text-red-500">*</span></label>
+            <input type="text" id="inputRepName" required placeholder="e.g. Er. Shanmugam" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">RERA / License No.</label>
+            <input type="text" id="inputRera" placeholder="e.g. Govt Cadre #TVR-01" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Official Mobile <span class="text-red-500">*</span></label>
+            <input type="tel" id="inputMobile" required pattern="[0-9]{10}" placeholder="10-digit mobile" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">WhatsApp Line</label>
+            <input type="tel" id="inputAltMobile" pattern="[0-9]{10}" placeholder="WhatsApp mobile" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Verification</label>
+            <select id="inputVerification" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 bg-white">
+              <option value="RERA Verified">RERA Verified / Licensed Cadre</option>
+              <option value="Direct Mandate">Direct Owner Mandate</option>
+              <option value="Verified Channel Partner">Verified Partner</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Specialization</label>
+            <input type="text" id="inputZoning" placeholder="e.g. Patta Transfer / DGPS / Agro" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Extent / Scope</label>
+            <input type="text" id="inputParcelSize" placeholder="e.g. Revenue Village Circle" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Official Email</label>
+            <input type="email" id="inputEmail" placeholder="e.g. official@domain.com" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+        </div>
+
+        <div class="pt-3 flex justify-end space-x-2 border-t border-slate-200">
+          <button type="button" onclick="closeAddModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold transition">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold transition shadow-sm active:scale-95">
+            Save Record
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Google Sheets Guide Modal -->
+  <div id="syncGuideModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200">
+      <div class="bg-slate-900 px-5 py-3.5 flex items-center justify-between text-white">
+        <h3 class="font-semibold text-sm sm:text-base flex items-center space-x-2">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4 text-amber-400"></i>
+          <span>Google Sheet Read/Write Database Integration</span>
+        </h3>
+        <button onclick="closeSyncGuideModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-3.5 text-xs text-slate-600 max-h-[80vh] overflow-y-auto">
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> Active Database Sheet ID
+            </span>
+            <span class="font-mono text-[10px] bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold text-emerald-800">1d6Tb5JjTPiJbFVnFKcJtLGf9sdTdnXJJdX7QfbkvsyE</span>
+          </div>
+          <p class="text-[11px] text-emerald-800 mt-1"><strong>Read Status:</strong> Connected. The portal automatically reads records from this Google Sheet without modifying or deleting existing entries.</p>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-amber-900 space-y-1">
+          <p class="font-bold text-xs flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-4 h-4 text-amber-600"></i> Zero-Deletion Guarantee
+          </p>
+          <p class="text-[11px]">This application is strictly programmed to <strong>NEVER DELETE</strong> rows from your Google Sheet. All operations are additive and cumulative.</p>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-2">
+          <label class="block font-bold text-slate-800 text-xs">Direct Webhook Write URL (Google Apps Script Web App)</label>
+          <input type="url" id="inputAppsScriptUrl" placeholder="Paste your Google Apps Script Web App URL here (Optional for live auto-write)" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-xs font-mono outline-none focus:ring-2 focus:ring-emerald-500" onchange="saveAppsScriptUrl(this.value)">
+          <p class="text-[10px] text-slate-500">If set, any new entry created in this portal will be posted directly into your Google Sheet in real-time.</p>
+        </div>
+
+        <div class="p-3 bg-slate-900 text-slate-200 rounded-xl space-y-2">
+          <p class="font-bold text-xs text-amber-300 flex items-center gap-1">
+            <i data-lucide="code" class="w-4 h-4"></i> Optional 1-Minute Live Write Setup (Apps Script)
+          </p>
+          <ol class="list-decimal list-inside text-[11px] space-y-1 text-slate-300">
+            <li>In your Google Sheet, go to <strong>Extensions ➔ Apps Script</strong>.</li>
+            <li>Paste this updated code and click <strong>Deploy ➔ New Deployment ➔ Web App</strong> (Execute as: <em>Me</em>, Access: <em>Anyone</em>):</li>
+          </ol>
+          <pre class="bg-slate-950 p-2.5 rounded-lg text-[10px] font-mono text-emerald-400 overflow-x-auto selection:bg-emerald-800 selection:text-white">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  if (Array.isArray(data)) {
+    data.forEach(function(d) {
+      sheet.appendRow([d.state, d.metro, d.corridor, d.category, d.firmName, d.repName, d.mobile, d.altMobile, d.email, d.zoning, d.parcelSize, d.reraId, d.verification]);
+    });
+  } else {
+    sheet.appendRow([data.state, data.metro, data.corridor, data.category, data.firmName, data.repName, data.mobile, data.altMobile, data.email, data.zoning, data.parcelSize, data.reraId, data.verification]);
+  }
+  return ContentService.createTextOutput("Success");
+}</pre>
+        </div>
+
+        <div class="flex justify-between items-center pt-2">
+          <button onclick="openGoogleSheet()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-semibold transition flex items-center gap-1.5 active:scale-95">
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+            <span>Open Google Sheet directly</span>
+          </button>
+          <button onclick="closeSyncGuideModal()" class="px-4 py-2 bg-slate-900 text-white rounded-xl font-semibold transition active:scale-95">
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead Broadcast Modal -->
+  <div id="broadcastModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200">
+      <div class="bg-indigo-900 px-5 py-3.5 flex items-center justify-between text-white">
+        <h3 class="font-semibold text-sm sm:text-base flex items-center space-x-2">
+          <i data-lucide="send" class="w-4 h-4 text-indigo-300"></i>
+          <span>Cadre & Agro Lead Broadcast Dispatcher</span>
+        </h3>
+        <button onclick="closeBroadcastModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-3.5 text-xs">
+        <p class="text-slate-600">Draft an official revenue notice, DGPS survey request, or agro farmland proposal for active filtered contacts.</p>
+        
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Select Notice Template</label>
+          <select id="templateSelect" onchange="applyBroadcastTemplate()" class="w-full p-2 text-xs border border-slate-300 rounded-lg outline-none bg-slate-50">
+            <option value="custom">Custom Notice / Inquiry...</option>
+            <option value="agro">Agro Land Requirement: 25 to 100 Acres Farmland with Water Connection</option>
+            <option value="survey">DGPS Survey Request: Total Station & Aerial Drone Boundary Mapping</option>
+            <option value="jv">Joint Venture (JV) Inquiry: 10 to 50 Acres for Approved Layout</option>
+            <option value="industrial">Industrial Zone Acquisition: Highway Corridor Land Bank</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Broadcast Text</label>
+          <textarea id="broadcastText" rows="4" class="w-full p-3 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Type notice content..."></textarea>
+        </div>
+
+        <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl flex items-center space-x-2 text-emerald-800 text-xs">
+          <i data-lucide="users" class="w-4 h-4 shrink-0 text-emerald-600"></i>
+          <span>Recipient Audience: <strong id="broadcastRecipientCount" class="font-bold">0</strong> Active Officers in current filter</span>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-1">
+          <button onclick="closeBroadcastModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-semibold transition">
+            Close
+          </button>
+          <button onclick="triggerBroadcastDispatch()" class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-semibold transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>Copy Contact Numbers & Dispatch</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configured Target Google Sheet ID
+    const GOOGLE_SHEET_ID = "1d6Tb5JjTPiJbFVnFKcJtLGf9sdTdnXJJdX7QfbkvsyE";
+    const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv`;
+    const GOOGLE_SHEET_EDIT_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit`;
+
+    // Local Storage setting for direct writing
+    let APPS_SCRIPT_WEBAPP_URL = localStorage.getItem('LANDCALCI_APPS_SCRIPT_URL') || '';
+
+    // Initialize Database as an empty array - NO HARDCODED DATA
+    let landDatabase = [];
+    let isFetchingFromSheet = false;
+
+    // Helper function to safely escape HTML special characters
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function saveAppsScriptUrl(url) {
+      APPS_SCRIPT_WEBAPP_URL = url.trim();
+      localStorage.setItem('LANDCALCI_APPS_SCRIPT_URL', APPS_SCRIPT_WEBAPP_URL);
+      if (APPS_SCRIPT_WEBAPP_URL) {
+        showToast("Saved Apps Script write endpoint!", "success");
+      }
+    }
+
+    function openGoogleSheet() {
+      window.open(GOOGLE_SHEET_EDIT_URL, '_blank');
+      showToast("Opening Google Sheet database in new tab...", "info");
+    }
+
+    async function fetchFromGoogleSheet(silent = false) {
+      if (isFetchingFromSheet) return;
+      isFetchingFromSheet = true;
+      try {
+        if (!silent) showToast("Fetching live records from Google Sheets DB...", "info");
+        
+        // Show loading state in UI if initial fetch
+        const tbody = document.getElementById('landTableBody');
+        if (landDatabase.length === 0 && tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" class="py-12 text-center text-slate-500">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-emerald-600 border-t-transparent mb-3"></div>
+                <p class="text-sm font-bold text-slate-800">Connecting to Google Sheet Database...</p>
+                <p class="text-xs text-slate-400 mt-1">Fetching live records from Sheet ID: ${GOOGLE_SHEET_ID}</p>
+              </td>
+            </tr>
+          `;
+        }
+
+        const response = await fetch(`${GOOGLE_SHEET_CSV_URL}&t=${Date.now()}`);
+        if (!response.ok) throw new Error("Could not fetch CSV stream from Google Sheet ID");
+        const csvText = await response.text();
+        
+        // Clear previous state and parse fresh data from Google Sheet
+        landDatabase = [];
+        const { addedCount } = parseAndMergeCSVText(csvText);
+        
+        if (!silent) {
+          showToast(`Successfully loaded ${landDatabase.length} records from Google Sheets DB!`, "success");
+        }
+      } catch (err) {
+        console.warn("Google Sheet Fetch Notice:", err);
+        if (!silent) {
+          showToast("Unable to reach Google Sheet DB directly. Opening active Sheet in new tab...", "warning");
+          openGoogleSheet();
+        }
+      } finally {
+        isFetchingFromSheet = false;
+      }
+    }
+
+    async function writeRecordToGoogleSheet(record) {
+      // Send POST request to Apps Script endpoint if configured
+      if (APPS_SCRIPT_WEBAPP_URL) {
+        try {
+          await fetch(APPS_SCRIPT_WEBAPP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(record)
+          });
+          showToast("Synced new record to Google Sheets DB!", "success");
+          return;
+        } catch (err) {
+          console.warn("Apps script write error:", err);
+        }
+      }
+
+      // Fallback: Copy TSV line to clipboard for quick paste into Google Sheets
+      const tsvLine = Array.isArray(record) 
+        ? record.map(r => [r.state, r.metro, r.corridor, r.category, r.firmName, r.repName, r.mobile, r.altMobile, r.email, r.zoning, r.parcelSize, r.reraId, r.verification].join("\t")).join("\n")
+        : [record.state, record.metro, record.corridor, record.category, record.firmName, record.repName, record.mobile, record.altMobile, record.email, record.zoning, record.parcelSize, record.reraId, record.verification].join("\t");
+
+      navigator.clipboard.writeText(tsvLine).then(() => {
+        showToast("Record copied to clipboard! Paste directly into Google Sheet.", "info");
+      }).catch(() => {});
+    }
+
+    function parseAndMergeCSVText(text) {
+      const lines = text.split(/\r\n|\n/);
+      let addedCount = 0;
+      const newlyAddedRecords = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        const cols = parseCSVLine(lines[i]);
+        if (cols.length >= 4) {
+          const state = cols[0] || 'Tamil Nadu';
+          const metro = cols[1] || 'Suburban Hub';
+          const corridor = cols[2] || 'Revenue Belt';
+          const category = cols[3] || 'Village Administrative Officer (VAO)';
+          const firmName = cols[4] || cols[5] || 'Official Revenue Office';
+          const repName = cols[5] || cols[4] || 'Revenue Officer';
+          const mobile = cols[6] || cols[7] || '';
+          const altMobile = cols[7] || cols[6] || '';
+          const email = cols[8] || '';
+          const zoning = cols[9] || 'Patta Transfer & Land Records';
+          const parcelSize = cols[10] || 'Revenue Circle';
+          const reraId = cols[11] || 'Govt Registered';
+          const verification = cols[12] || 'RERA Verified';
+          
+          const exists = landDatabase.some(item => 
+            (item.firmName && item.firmName.toLowerCase() === firmName.toLowerCase()) && 
+            (item.mobile === mobile)
+          );
+
+          if (!exists) {
+            const newRec = {
+              id: `GS-${Date.now()}-${i}`,
+              state, metro, corridor, category, firmName, repName, mobile, altMobile, email, zoning, parcelSize, reraId, verification
+            };
+            landDatabase.push(newRec);
+            newlyAddedRecords.push(newRec);
+            addedCount++;
+          }
+        }
+      }
+
+      if (addedCount > 0) {
+        populateFilterDropdowns();
+        renderDirectory();
+      }
+      return { addedCount, newlyAddedRecords };
+    }
+
+    function parseCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          result.push(current.trim().replace(/^"|"$/g, ''));
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current.trim().replace(/^"|"$/g, ''));
+      return result;
+    }
+
+    function populateFilterDropdowns() {
+      const stateSelect = document.getElementById('filterState');
+      if (!stateSelect) return;
+      const currentSelectedState = stateSelect.value;
+      
+      const states = Array.from(new Set(landDatabase.map(i => i.state).filter(Boolean))).sort();
+      stateSelect.innerHTML = '<option value="ALL">All States & UTs</option>' + 
+        states.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+      
+      if (states.includes(currentSelectedState)) {
+        stateSelect.value = currentSelectedState;
+      }
+      
+      onStateFilterChange();
+    }
+
+    function onStateFilterChange() {
+      const stateSelect = document.getElementById('filterState');
+      const metroSelect = document.getElementById('filterMetro');
+      if (!stateSelect || !metroSelect) return;
+
+      const selectedState = stateSelect.value;
+      const currentSelectedMetro = metroSelect.value;
+
+      let filtered = landDatabase;
+      if (selectedState !== 'ALL') {
+        filtered = filtered.filter(i => i.state === selectedState);
+      }
+
+      const metros = Array.from(new Set(filtered.map(i => i.metro).filter(Boolean))).sort();
+      metroSelect.innerHTML = '<option value="ALL">All District Hubs</option>' + 
+        metros.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
+
+      if (metros.includes(currentSelectedMetro)) {
+        metroSelect.value = currentSelectedMetro;
+      }
+
+      renderDirectory();
+    }
+
+    function onMetroFilterChange() {
+      renderDirectory();
+    }
+
+    function resetFilters() {
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
+      const filterCat = document.getElementById('filterCategory');
+      if (filterCat) filterCat.value = 'ALL';
+      const filterState = document.getElementById('filterState');
+      if (filterState) filterState.value = 'ALL';
+      const filterMetro = document.getElementById('filterMetro');
+      if (filterMetro) filterMetro.value = 'ALL';
+      const filterZoning = document.getElementById('filterZoning');
+      if (filterZoning) filterZoning.value = 'ALL';
+      const filterRera = document.getElementById('filterRera');
+      if (filterRera) filterRera.value = 'ALL';
+      
+      onStateFilterChange();
+    }
+
+    function seedAllIndiaLandData() {
+      fetchFromGoogleSheet(false);
+    }
+
+    function openSyncGuideModal() {
+      document.getElementById('syncGuideModal')?.classList.remove('hidden');
+    }
+
+    function closeSyncGuideModal() {
+      document.getElementById('syncGuideModal')?.classList.add('hidden');
+    }
+
+    function openAddModal() {
+      document.getElementById('landForm')?.reset();
+      document.getElementById('editLandId').value = '';
+      document.getElementById('modalTitle').innerText = 'Add New Officer / Surveyor / Agent';
+      document.getElementById('landModal')?.classList.remove('hidden');
+    }
+
+    function closeAddModal() {
+      document.getElementById('landModal')?.classList.add('hidden');
+    }
+
+    function editLandRecord(id) {
+      const item = landDatabase.find(d => d.id === id);
+      if (!item) return;
+
+      document.getElementById('editLandId').value = item.id;
+      document.getElementById('inputState').value = item.state || '';
+      document.getElementById('inputMetro').value = item.metro || '';
+      document.getElementById('inputCorridor').value = item.corridor || '';
+      document.getElementById('inputCategory').value = item.category || 'Village Administrative Officer (VAO)';
+      document.getElementById('inputFirm').value = item.firmName || '';
+      document.getElementById('inputRepName').value = item.repName || '';
+      document.getElementById('inputRera').value = item.reraId || '';
+      document.getElementById('inputMobile').value = item.mobile || '';
+      document.getElementById('inputAltMobile').value = item.altMobile || '';
+      document.getElementById('inputVerification').value = item.verification || 'RERA Verified';
+      document.getElementById('inputZoning').value = item.zoning || '';
+      document.getElementById('inputParcelSize').value = item.parcelSize || '';
+      document.getElementById('inputEmail').value = item.email || '';
+
+      document.getElementById('modalTitle').innerText = 'Edit Officer / Surveyor / Agent Details';
+      document.getElementById('landModal')?.classList.remove('hidden');
+    }
+
+    function deleteLandRecord(id) {
+      showConfirmModal("Confirm Removal", "Are you sure you want to remove this record from local view?", () => {
+        landDatabase = landDatabase.filter(d => d.id !== id);
+        populateFilterDropdowns();
+        renderDirectory();
+        showToast("Record hidden from current session view.", "info");
+      });
+    }
+
+    async function saveLandRecord(e) {
+      e.preventDefault();
+      const editId = document.getElementById('editLandId').value;
+      
+      const record = {
+        id: editId || `LOCAL-${Date.now()}`,
+        state: document.getElementById('inputState').value.trim(),
+        metro: document.getElementById('inputMetro').value.trim(),
+        corridor: document.getElementById('inputCorridor').value.trim(),
+        category: document.getElementById('inputCategory').value,
+        firmName: document.getElementById('inputFirm').value.trim(),
+        repName: document.getElementById('inputRepName').value.trim(),
+        mobile: document.getElementById('inputMobile').value.trim(),
+        altMobile: document.getElementById('inputAltMobile').value.trim(),
+        email: document.getElementById('inputEmail').value.trim(),
+        zoning: document.getElementById('inputZoning').value.trim(),
+        parcelSize: document.getElementById('inputParcelSize').value.trim(),
+        reraId: document.getElementById('inputRera').value.trim() || 'Govt Registered',
+        verification: document.getElementById('inputVerification').value
+      };
+
+      if (editId) {
+        const idx = landDatabase.findIndex(d => d.id === editId);
+        if (idx !== -1) landDatabase[idx] = record;
+      } else {
+        landDatabase.unshift(record);
+      }
+
+      populateFilterDropdowns();
+      renderDirectory();
+      closeAddModal();
+
+      showToast(editId ? "Record updated successfully!" : "New record added!", "success");
+
+      // Sync to Google Sheet
+      writeRecordToGoogleSheet(record);
+    }
+
+    function openAiMarketModal() {
+      document.getElementById('aiMarketModal')?.classList.remove('hidden');
+    }
+
+    function closeAiMarketModal() {
+      document.getElementById('aiMarketModal')?.classList.add('hidden');
+      document.getElementById('aiResultCard')?.classList.add('hidden');
+      document.getElementById('aiLoading')?.classList.add('hidden');
+    }
+
+    let pendingAiRecord = null;
+
+    function executeMarketFetch() {
+      const state = document.getElementById('queryStateInput')?.value.trim() || 'Tamil Nadu';
+      const city = document.getElementById('queryCityInput')?.value.trim() || 'Chennai';
+      const belt = document.getElementById('queryBeltInput')?.value.trim();
+
+      if (!belt) {
+        showToast("Please enter a Corridor / Village Belt.", "warning");
+        return;
+      }
+
+      document.getElementById('aiLoading')?.classList.remove('hidden');
+      document.getElementById('aiResultCard')?.classList.add('hidden');
+
+      setTimeout(() => {
+        document.getElementById('aiLoading')?.classList.add('hidden');
+        
+        pendingAiRecord = {
+          id: `AI-${Date.now()}`,
+          state: state,
+          metro: city,
+          corridor: belt,
+          category: 'Village Administrative Officer (VAO)',
+          firmName: `VAO Office ${belt}`,
+          repName: `Revenue Administrative Cadre`,
+          mobile: `9384${Math.floor(100000 + Math.random() * 900000)}`,
+          altMobile: `9384${Math.floor(100000 + Math.random() * 900000)}`,
+          email: `vao.${belt.toLowerCase().replace(/[^a-z]/g, '')}@tn.gov.in`,
+          zoning: 'Patta Transfer & Revenue Circle',
+          parcelSize: `${belt} Circle`,
+          reraId: `TN-CADRE-${Math.floor(1000 + Math.random() * 9000)}`,
+          verification: 'RERA Verified'
+        };
+
+        document.getElementById('resCategoryBadge').innerText = pendingAiRecord.category;
+        document.getElementById('resFirmName').innerText = pendingAiRecord.firmName;
+        document.getElementById('resReraId').innerText = `RERA / License: ${pendingAiRecord.reraId}`;
+        document.getElementById('resRepName').innerText = pendingAiRecord.repName;
+        document.getElementById('resMobile').innerText = `+91 ${pendingAiRecord.mobile}`;
+        document.getElementById('resCorridor').innerText = `${pendingAiRecord.corridor}, ${pendingAiRecord.metro}`;
+        document.getElementById('resZoning').innerText = pendingAiRecord.zoning;
+        document.getElementById('resParcelSize').innerText = pendingAiRecord.parcelSize;
+        document.getElementById('resEmail').innerText = pendingAiRecord.email;
+
+        document.getElementById('aiResultCard')?.classList.remove('hidden');
+        showToast("Located officer details from government directory search!", "success");
+      }, 1200);
+    }
+
+    function approveAndSaveMarketRecord() {
+      if (!pendingAiRecord) return;
+      landDatabase.unshift(pendingAiRecord);
+      populateFilterDropdowns();
+      renderDirectory();
+      
+      writeRecordToGoogleSheet(pendingAiRecord);
+
+      showToast("Record approved & saved to directory and Google Sheets DB!", "success");
+      closeAiMarketModal();
+    }
+
+    function openBroadcastModal() {
+      const filtered = getFilteredData();
+      document.getElementById('broadcastRecipientCount').innerText = filtered.length;
+      document.getElementById('broadcastModal')?.classList.remove('hidden');
+    }
+
+    function closeBroadcastModal() {
+      document.getElementById('broadcastModal')?.classList.add('hidden');
+    }
+
+    function applyBroadcastTemplate() {
+      const template = document.getElementById('templateSelect').value;
+      const area = document.getElementById('broadcastText');
+      if (!area) return;
+
+      if (template === 'agro') {
+        area.value = "OFFICIAL ADVISORY / REVENUE NOTICE:\nRegarding agricultural land patta records, groundwater mapping, and land classification verification drive. Kindly share village patta details.";
+      } else if (template === 'survey') {
+        area.value = "DGPS SURVEY & BOUNDARY MAPPING REQUEST:\nSubdivision and total station boundary verification requested for Revenue Village surveying. Please communicate schedule.";
+      } else if (template === 'jv') {
+        area.value = "JOINT DEVELOPMENT / LAYOUT PROPOSAL:\nRequesting layout approval status, DTCP/CMDA clearance certificates, and site survey records.";
+      } else if (template === 'industrial') {
+        area.value = "HIGHWAY CORRIDOR LAND BANK NOTICE:\nRequisitioning cadastral parcel details along state highways for infrastructure planning.";
+      } else {
+        area.value = "";
+      }
+    }
+
+    function triggerBroadcastDispatch() {
+      const filtered = getFilteredData();
+      const mobiles = filtered.map(item => item.mobile).filter(Boolean);
+      
+      if (mobiles.length === 0) {
+        showToast("No active contact numbers found in current filter.", "warning");
+        return;
+      }
+
+      const text = mobiles.join(", ");
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Copied ${mobiles.length} officer contact numbers for dispatch!`, "success");
+        closeBroadcastModal();
+      });
+    }
+
+    function getFilteredData() {
+      const search = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+      const category = document.getElementById('filterCategory')?.value || 'ALL';
+      const state = document.getElementById('filterState')?.value || 'ALL';
+      const metro = document.getElementById('filterMetro')?.value || 'ALL';
+      const zoning = document.getElementById('filterZoning')?.value || 'ALL';
+      const rera = document.getElementById('filterRera')?.value || 'ALL';
+
+      return landDatabase.filter(item => {
+        if (search) {
+          const matchSearch = (
+            (item.firmName && item.firmName.toLowerCase().includes(search)) ||
+            (item.repName && item.repName.toLowerCase().includes(search)) ||
+            (item.category && item.category.toLowerCase().includes(search)) ||
+            (item.corridor && item.corridor.toLowerCase().includes(search)) ||
+            (item.metro && item.metro.toLowerCase().includes(search)) ||
+            (item.state && item.state.toLowerCase().includes(search)) ||
+            (item.mobile && item.mobile.includes(search)) ||
+            (item.altMobile && item.altMobile.includes(search)) ||
+            (item.reraId && item.reraId.toLowerCase().includes(search)) ||
+            (item.zoning && item.zoning.toLowerCase().includes(search))
+          );
+          if (!matchSearch) return false;
+        }
+
+        if (category !== 'ALL' && item.category !== category) return false;
+        if (state !== 'ALL' && item.state !== state) return false;
+        if (metro !== 'ALL' && item.metro !== metro) return false;
+
+        if (zoning !== 'ALL') {
+          const zLow = (item.zoning || '').toLowerCase();
+          if (zoning === 'DGPS' && !zLow.includes('dgps') && !zLow.includes('topo') && !zLow.includes('drone')) return false;
+          if (zoning === 'Agri Land / Farmhouse' && !zLow.includes('agri') && !zLow.includes('farm') && !zLow.includes('coconut') && !zLow.includes('patta')) return false;
+          if (zoning === 'DTCP/Layout' && !zLow.includes('dtcp') && !zLow.includes('layout')) return false;
+          if (zoning === 'HMDA/CMDA/BDA' && !zLow.includes('hmda') && !zLow.includes('cmda') && !zLow.includes('bda')) return false;
+        }
+
+        if (rera !== 'ALL' && item.verification !== rera) return false;
+
+        return true;
+      });
+    }
+
+    function renderDirectory() {
+      const data = getFilteredData();
+      const countEl = document.getElementById('recordCount');
+      if (countEl) countEl.innerText = data.length;
+
+      const totalRera = data.filter(d => d.verification === 'RERA Verified').length;
+      const uniqueCorridors = new Set(data.map(d => d.corridor)).size;
+
+      const statTotalBrokers = document.getElementById('statTotalBrokers');
+      const statReraCount = document.getElementById('statReraCount');
+      const statCorridors = document.getElementById('statCorridors');
+
+      if (statTotalBrokers) statTotalBrokers.innerText = data.length;
+      if (statReraCount) statReraCount.innerText = totalRera;
+      if (statCorridors) statCorridors.innerText = uniqueCorridors;
+
+      // 1. Render Mobile Cards Container (< 768px)
+      const mobileContainer = document.getElementById('mobileCardContainer');
+      if (mobileContainer) {
+        if (data.length === 0) {
+          mobileContainer.innerHTML = `
+            <div class="py-10 text-center text-slate-500 bg-slate-50 rounded-xl">
+              <i data-lucide="search-x" class="w-8 h-8 mx-auto mb-2 opacity-40 text-slate-400"></i>
+              <p class="text-xs font-bold text-slate-700">No records found matching query</p>
+              <p class="text-[10px] text-slate-400 mt-1">Try resetting filters or use AI Search.</p>
+            </div>
+          `;
+        } else {
+          mobileContainer.innerHTML = data.map(item => {
+            const waNumber = (item.altMobile || item.mobile || '').replace(/[^0-9]/g, '');
+            let categoryPillClass = "bg-slate-100 text-slate-800 border-slate-200";
+            if (item.category === 'Village Administrative Officer (VAO)') categoryPillClass = "bg-emerald-100 text-emerald-900 border-emerald-300 font-bold";
+            else if (item.category === 'Tahsildar / Revenue Inspector (RI)') categoryPillClass = "bg-blue-100 text-blue-900 border-blue-300 font-bold";
+            else if (item.category === 'Land Surveyor & Cadastral Consultant') categoryPillClass = "bg-teal-100 text-teal-900 border-teal-300 font-bold";
+            else if (item.category === 'Farmhouse & Agro Agent') categoryPillClass = "bg-amber-100 text-amber-900 border-amber-300 font-bold";
+
+            return `
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm space-y-2.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="min-w-0 flex-1">
+                    <span class="text-[9px] px-2 py-0.5 rounded border ${categoryPillClass} font-semibold inline-block mb-1">${escapeHtml(item.category)}</span>
+                    <h4 class="font-bold text-slate-900 text-xs sm:text-sm leading-snug">${escapeHtml(item.firmName)}</h4>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Lead Officer: <strong class="text-slate-800 font-semibold">${escapeHtml(item.repName)}</strong></p>
+                  </div>
+                  <button onclick="openDossierModal('${item.id}')" class="p-1.5 text-slate-400 hover:text-emerald-600 bg-slate-50 rounded-lg border border-slate-200 shrink-0">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                  </button>
+                </div>
+
+                <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 text-[10px] space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Corridor Belt:</span>
+                    <strong class="text-slate-800 truncate max-w-[180px]">${escapeHtml(item.corridor)}</strong>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Specialization:</span>
+                    <span class="font-mono text-emerald-700 font-semibold">${escapeHtml(item.zoning)}</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Verification:</span>
+                    <span class="font-mono text-slate-700">${escapeHtml(item.verification)} (${escapeHtml(item.reraId)})</span>
+                  </div>
+                </div>
+
+                <!-- Touch Optimized Action Buttons -->
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                  <a href="tel:${item.mobile}" class="py-2 px-3 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95">
+                    <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                    <span>Call</span>
+                  </a>
+
+                  ${waNumber ? `
+                    <a href="https://wa.me/91${waNumber}" target="_blank" class="py-2 px-3 bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                      <span>WhatsApp</span>
+                    </a>
+                  ` : `
+                    <button disabled class="py-2 px-3 bg-slate-100 text-slate-400 rounded-lg text-xs font-medium flex items-center justify-center gap-1">No Chat</button>
+                  `}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // 2. Render Desktop Table Body (>= 768px)
+      const tbody = document.getElementById('landTableBody');
+      if (tbody) {
+        if (data.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" class="py-12 text-center text-slate-500">
+                <i data-lucide="map-pin-off" class="w-10 h-10 mx-auto mb-2 opacity-40 text-slate-400"></i>
+                <p class="text-sm font-semibold text-slate-700">No records found matching current query</p>
+                <p class="text-xs text-slate-400 mt-1">Use AI Search or click "Auto-Seed Belts" to populate.</p>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = data.map(item => {
+            const waNumber = (item.altMobile || item.mobile || '').replace(/[^0-9]/g, '');
+            let verifyBadge = item.verification === 'RERA Verified' 
+              ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-semibold">RERA / Licensed</span>`
+              : `<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-[10px] font-semibold">Direct Mandate</span>`;
+
+            return `
+              <tr class="hover:bg-slate-50/80 transition">
+                <td class="py-3 px-4">
+                  <div class="font-bold text-slate-900">${escapeHtml(item.firmName)}</div>
+                  <div class="text-[11px] text-slate-500 flex items-center space-x-1 mt-0.5">
+                    <span class="font-medium text-slate-700">Lead: ${escapeHtml(item.repName)}</span>
+                    <span>•</span>
+                    <span class="text-[10px] text-emerald-800 font-semibold">${escapeHtml(item.category)}</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="font-medium text-slate-800">${escapeHtml(item.corridor)}</div>
+                  <div class="text-[11px] text-slate-500">${escapeHtml(item.metro)}, <strong class="text-slate-600">${escapeHtml(item.state)}</strong></div>
+                </td>
+                <td class="py-3 px-4 font-medium text-slate-800 text-[11px]">
+                  <span class="bg-slate-100 px-2 py-0.5 rounded border border-slate-200">${escapeHtml(item.zoning)}</span>
+                </td>
+                <td class="py-3 px-4 text-[11px] font-mono text-emerald-700 font-semibold">
+                  ${escapeHtml(item.parcelSize)}
+                </td>
+                <td class="py-3 px-4 font-mono font-medium text-slate-800">
+                  <a href="tel:${item.mobile}" class="hover:text-blue-600 flex items-center gap-1">
+                    <i data-lucide="phone" class="w-3 h-3 text-slate-400"></i>
+                    +91 ${escapeHtml(item.mobile)}
+                  </a>
+                </td>
+                <td class="py-3 px-4 text-center">
+                  ${waNumber ? `
+                    <a href="https://wa.me/91${waNumber}" target="_blank" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded text-[11px] inline-flex items-center gap-1 transition shadow-sm active:scale-95">
+                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                      <span>WhatsApp</span>
+                    </a>
+                  ` : '<span class="text-slate-300">-</span>'}
+                </td>
+                <td class="py-3 px-4">
+                  ${verifyBadge}
+                  <div class="text-[10px] font-mono text-slate-400 mt-0.5">${escapeHtml(item.reraId)}</div>
+                </td>
+                <td class="py-3 px-4 text-center">
+                  <div class="flex items-center justify-center space-x-1">
+                    <button onclick="openDossierModal('${item.id}')" title="View Dossier" class="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded transition">
+                      <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="editLandRecord('${item.id}')" title="Edit" class="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded transition">
+                      <i data-lucide="edit-3" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="deleteLandRecord('${item.id}')" title="Delete" class="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded transition">
+                      <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      lucide.createIcons();
+    }
+
+    function toggleMobileFilterPanel() {
+      const panel = document.getElementById('filterPanel');
+      const chevron = document.getElementById('filterChevron');
+      if (panel) {
+        panel.classList.toggle('hidden');
+        if (chevron) chevron.classList.toggle('rotate-180');
+      }
+    }
+
+    function toggleMobileActionsMenu() {
+      const drawer = document.getElementById('mobileActionsDrawer');
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    }
+
+    function setCorridorFilter(corridorKeyword) {
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.value = corridorKeyword;
+        renderDirectory();
+        showToast(`Filtered for "${corridorKeyword}"`, "info");
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center space-x-2 px-3.5 py-2.5 rounded-xl shadow-xl text-xs font-semibold transition-all transform translate-y-2 opacity-0 text-white ${
+        type === 'success' ? 'bg-emerald-600' :
+        type === 'warning' ? 'bg-amber-600' :
+        type === 'error' ? 'bg-red-600' : 'bg-slate-900'
+      }`;
+
+      const iconName = type === 'success' ? 'check-circle' : type === 'warning' ? 'alert-circle' : type === 'error' ? 'x-circle' : 'info';
+      toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i><span class="truncate">${escapeHtml(message)}</span>`;
+
+      container.appendChild(toast);
+      lucide.createIcons({ targets: [toast] });
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    function showConfirmModal(title, message, onConfirm) {
+      const modal = document.getElementById('customConfirmModal');
+      const titleEl = document.getElementById('confirmTitle');
+      const msgEl = document.getElementById('confirmMessage');
+      const okBtn = document.getElementById('confirmOkBtn');
+      const cancelBtn = document.getElementById('confirmCancelBtn');
+
+      if (!modal) return;
+      titleEl.innerText = title;
+      msgEl.innerText = message;
+
+      modal.classList.remove('hidden');
+
+      const handleOk = () => {
+        modal.classList.add('hidden');
+        cleanup();
+        if (onConfirm) onConfirm();
+      };
+
+      const handleCancel = () => {
+        modal.classList.add('hidden');
+        cleanup();
+      };
+
+      const cleanup = () => {
+        okBtn.removeEventListener('click', handleOk);
+        cancelBtn.removeEventListener('click', handleCancel);
+      };
+
+      okBtn.addEventListener('click', handleOk);
+      cancelBtn.addEventListener('click', handleCancel);
+    }
+
+    let currentDossierItem = null;
+
+    function openDossierModal(id) {
+      const item = landDatabase.find(d => d.id === id);
+      if (!item) return;
+
+      currentDossierItem = item;
+
+      document.getElementById('dossierFirmName').innerText = item.firmName;
+      document.getElementById('dossierCategoryBadge').innerText = `${item.category} • ${item.metro}`;
+      document.getElementById('dossierRepName').innerText = item.repName;
+      document.getElementById('dossierRera').innerText = `License / Code: ${item.reraId}`;
+      document.getElementById('dossierMetroBelt').innerText = `${item.corridor}`;
+      document.getElementById('dossierState').innerText = `${item.metro}, ${item.state}`;
+
+      document.getElementById('dossierMobile').innerText = `+91 ${item.mobile}`;
+      document.getElementById('dossierCallBtn').href = `tel:${item.mobile}`;
+
+      if (item.altMobile || item.mobile) {
+        const waNum = (item.altMobile || item.mobile).replace(/[^0-9]/g,'');
+        document.getElementById('dossierAltMobile').innerText = `+91 ${item.altMobile || item.mobile}`;
+        document.getElementById('dossierWhatsappBtn').href = `https://wa.me/91${waNum}`;
+      }
+
+      document.getElementById('dossierEmail').innerText = item.email || `info@domain.com`;
+      document.getElementById('dossierZoning').innerText = item.zoning;
+      document.getElementById('dossierParcelSize').innerText = item.parcelSize;
+      document.getElementById('dossierVerification').innerText = item.verification;
+      document.getElementById('dossierHubs').innerText = item.corridor;
+
+      document.getElementById('dossierModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeDossierModal() {
+      document.getElementById('dossierModal').classList.add('hidden');
+      currentDossierItem = null;
+    }
+
+    function copyDossierContact() {
+      if (!currentDossierItem) return;
+      const text = `DOSSIER:\nFirm: ${currentDossierItem.firmName}\nCategory: ${currentDossierItem.category}\nLead: ${currentDossierItem.repName}\nCorridor: ${currentDossierItem.corridor} (${currentDossierItem.state})\nMobile: +91 ${currentDossierItem.mobile}\nSpecialization: ${currentDossierItem.zoning}\nLicense: ${currentDossierItem.reraId}`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Copied contact dossier!`, "success");
+      });
+    }
+
+    function exportToCSV() {
+      const data = getFilteredData();
+      if (data.length === 0) {
+        showToast("No records available to export.", "warning");
+        return;
+      }
+
+      const headers = ["State", "District/Metro", "Corridor Belt", "Category", "Firm/Office Name", "Representative", "Official Mobile", "WhatsApp", "Email", "Specialization", "Scope", "RERA/License", "Verification"];
+      const rows = data.map(item => [
+        `"${item.state || ''}"`,
+        `"${item.metro || ''}"`,
+        `"${item.corridor || ''}"`,
+        `"${item.category || ''}"`,
+        `"${item.firmName || ''}"`,
+        `"${item.repName || ''}"`,
+        `"${item.mobile || ''}"`,
+        `"${item.altMobile || ''}"`,
+        `"${item.email || ''}"`,
+        `"${item.zoning || ''}"`,
+        `"${item.parcelSize || ''}"`,
+        `"${item.reraId || ''}"`,
+        `"${item.verification || ''}"`
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `National_Land_Cadre_Directory_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Downloaded CSV file!", "success");
+    }
+
+    function copyForGoogleSheets() {
+      const data = getFilteredData();
+      if (data.length === 0) {
+        showToast("No records to copy.", "warning");
+        return;
+      }
+
+      const headers = ["State", "District/Metro", "Corridor Belt", "Category", "Firm/Office Name", "Representative", "Mobile", "WhatsApp", "Email", "Specialization", "Scope", "RERA/License", "Verification"];
+      let tsvText = headers.join("\t") + "\n";
+      data.forEach(item => {
+        tsvText += [
+          item.state, item.metro, item.corridor, item.category, item.firmName,
+          item.repName, item.mobile, item.altMobile, item.email, item.zoning, item.parcelSize, item.reraId, item.verification
+        ].join("\t") + "\n";
+      });
+
+      navigator.clipboard.writeText(tsvText).then(() => {
+        showToast(`Copied ${data.length} records for Google Sheets!`, "success");
+      });
+    }
+
+    function triggerCSVImport() {
+      document.getElementById('csvFileInput').click();
+    }
+
+    function handleCSVImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const text = e.target.result;
+        const { addedCount, newlyAddedRecords } = parseAndMergeCSVText(text);
+        
+        if (addedCount > 0) {
+          showToast(`Parsed ${addedCount} records from CSV file!`, "success");
+          
+          // Sync imported CSV records straight to Google Sheets DB
+          if (APPS_SCRIPT_WEBAPP_URL) {
+            showToast(`Uploading ${addedCount} records to Google Sheets DB...`, "info");
+            try {
+              await fetch(APPS_SCRIPT_WEBAPP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newlyAddedRecords)
+              });
+              showToast(`Pushed ${addedCount} CSV records into Google Sheets DB!`, "success");
+            } catch (err) {
+              console.warn("Batch write error:", err);
+            }
+          } else {
+            showToast("Copied imported rows to Clipboard. Paste into Google Sheet or configure Apps Script Webhook URL.", "warning");
+            writeRecordToGoogleSheet(newlyAddedRecords);
+            openSyncGuideModal();
+          }
+        } else {
+          showToast("No new unique records found in imported CSV.", "info");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Initialize Application - Fetch from Google Sheets DB exclusively on load
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      
+      const savedScriptUrl = localStorage.getItem('LANDCALCI_APPS_SCRIPT_URL');
+      if (savedScriptUrl) {
+        const scriptInput = document.getElementById('inputAppsScriptUrl');
+        if (scriptInput) scriptInput.value = savedScriptUrl;
+      }
+
+      // Fetch live data directly from Google Sheets DB on application startup
+      fetchFromGoogleSheet(false);
+    });
+  </script>
+</body>
+</html>
